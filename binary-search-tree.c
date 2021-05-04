@@ -38,7 +38,7 @@ int main()
 	int key;
 	Node* head = NULL;
 	Node* ptr = NULL;	/* temp */
-
+	printf("[----- [이연규] [2018038038] -----]\n");
 	do {
 		printf("\n\n");
 		printf("----------------------------------------------------------------\n");
@@ -53,7 +53,7 @@ int main()
 
 		printf("Command = ");
 		fflush(stdout);
-		scanf_s(" %c", &command);
+		scanf(" %c", &command);
 
 		switch (command) {
 		case 'z': case 'Z':
@@ -65,19 +65,19 @@ int main()
 		case 'n': case 'N':
 			printf("Your Key = ");
 			fflush(stdout);
-			scanf_s("%d", &key);
+			scanf("%d", &key);
 			insert(head, key);
 			break;
 		case 'd': case 'D':
 			printf("Your Key = ");
 			fflush(stdout);
-			scanf_s("%d", &key);
+			scanf("%d", &key);
 			deleteLeafNode(head, key);
 			break;
 		case 'f': case 'F':
 			printf("Your Key = ");
 			fflush(stdout);
-			scanf_s("%d", &key);
+			scanf("%d", &key);
 			ptr = searchIterative(head, key);
 			if (ptr != NULL)
 				printf("\n node [%d] found at %p\n", ptr->key, ptr);
@@ -87,7 +87,7 @@ int main()
 		case 's': case 'S':
 			printf("Your Key = ");
 			fflush(stdout);
-			scanf_s("%d", &key);
+			scanf("%d", &key);
 			ptr = searchRecursive(head->left, key);
 			if (ptr != NULL)
 				printf("\n node [%d] found at %p\n", ptr->key, ptr);
@@ -134,7 +134,7 @@ void inorderTraversal(Node* ptr) // 왼쪽자식>뿌리>오른쪽자식 순으�
 {
 	if (ptr) {
 		inorderTraversal(ptr->left);
-		printf("%d", ptr->key);
+		printf("[%d]\t", ptr->key);
 		inorderTraversal(ptr->right);
 	}
 }
@@ -142,7 +142,7 @@ void inorderTraversal(Node* ptr) // 왼쪽자식>뿌리>오른쪽자식 순으�
 void preorderTraversal(Node* ptr)//뿌리>왼쪽자식>오른쪽자식 순으로 출력. VLR 형식
 {
 	if (ptr) {
-		printf("%d", ptr->key);
+		printf("[%d]\t", ptr->key);
 		preorderTraversal(ptr->left);
 		preorderTraversal(ptr->right);
 	}
@@ -153,7 +153,7 @@ void postorderTraversal(Node* ptr) //왼쪽자식>오른쪽자식>뿌리 순으�
 	if (ptr) {
 		postorderTraversal(ptr->left);
 		postorderTraversal(ptr->right);
-		printf("%d ", ptr->key);
+		printf("[%d]\t", ptr->key);
 	}
 }
 
@@ -190,9 +190,32 @@ int insert(Node* head, int key)
 
 int deleteLeafNode(Node* head, int key)
 {
+	Node *tmp=head->left; //현재 노드 저장용
+	Node *parent =tmp; //부모노드 저장용
+	Node *del; //삭제할 노드.
 
+	while(tmp->key !=key){ //현재 노드의 키값과 제거 대상의 키값이 같을때 까지 반복
+		parent=tmp; //부모 노드 저장
+		if(tmp->key<key) //현재 노드 보다 제거할 값이 더 크면
+			tmp=tmp->right; // 오른쪽으로 옮겨준다.
+		else //현재 노드 보다 제거할 값이 더 작으면
+			tmp=tmp->left; // 왼쪽으로 옮겨준다.
+	}
+	del=tmp;// 제거하고자 한 키값을 가지고 있는 노드의 위치 저장.
 
-
+	if(tmp->left==NULL &&tmp->right==NULL){ // 제거하고자 하는 노드의 자식이 하나도 없을때.
+		if(parent->left!=NULL){ //부모의 왼쪽 자식이 존재할때.
+			if(tmp->key==parent->left->key){ //그 값과 제거 하고자하는 노드의 키값이 같다면
+				parent->left=NULL; //왼쪽 노드를 NULL로 바꿔준다.
+				free(del);
+				return 0;
+			}
+		}
+	parent->right=NULL; //왼쪽 자식이 존재 하지 않다면 오른쪽 자식을 NULL로 처리.
+	free(del);
+	return 0;
+	}
+	return 1;
 }
 
 Node* searchRecursive(Node* ptr, int key)
@@ -219,13 +242,25 @@ Node* searchIterative(Node* head, int key)
 		else //노드 안의 키값이 찾는 키값보다 큰 경우 왼쪽으로 간다.
 			cur=cur->left;
 	}
+	return 0;
 }
 
 
 int freeBST(Node* head)
 {
-
-
+	if (!head){ //빈 함수 인 경우에 에러 출력.
+		printf("error!");
+		return -1;
+	}
+	if (head){ //빈 함수가 아닌 경우에 출력.
+		if(head->key==-9999){ //맨처음에 헤더노도의 왼쪽으로 시작지점으로 옮겨준다.
+			freeBST(head->left);
+		}
+		freeBST(head -> left); //후위 순회 방식으로 왼쪽자식>오른쪽자식>뿌리 순으로 제거.
+		freeBST(head -> right);
+		free(head);
+		head = NULL;
+	}
 	return 1;
 }
 
