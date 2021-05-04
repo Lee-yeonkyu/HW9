@@ -139,7 +139,7 @@ void inorderTraversal(Node* ptr) // 왼쪽자식>뿌리>오른쪽자식 순으�
 	}
 }
 
-void preorderTraversal(Node* ptr) //왼쪽자식>오른쪽자식>뿌리 순으로 출력.LRV 형식
+void preorderTraversal(Node* ptr)//뿌리>왼쪽자식>오른쪽자식 순으로 출력. VLR 형식
 {
 	if (ptr) {
 		printf("%d", ptr->key);
@@ -148,7 +148,7 @@ void preorderTraversal(Node* ptr) //왼쪽자식>오른쪽자식>뿌리 순으�
 	}
 }
 
-void postorderTraversal(Node* ptr) //뿌리>왼쪽자식>오른쪽자식 순으로 출력. VLR 형식
+void postorderTraversal(Node* ptr) //왼쪽자식>오른쪽자식>뿌리 순으로 출력.LRV 형식
 {
 	if (ptr) {
 		postorderTraversal(ptr->left);
@@ -191,22 +191,42 @@ int insert(Node* head, int key)
 int deleteLeafNode(Node* head, int key)
 {
 
+
+
 }
 
 Node* searchRecursive(Node* ptr, int key)
 {
+	if (ptr == NULL) //ptr이 공백이라면 NULL 리턴
+		return NULL;
+	if (key == ptr->key) //찾는 값이라면 ptr 리턴
+		return ptr;
+	else if (key < ptr->key) //찾는값 보다 ptr의 값이 더 크다면 왼쪽으로 재귀함수 실행
+		return searchRecursive(ptr->left, key);
+	else //찾는값 보다 ptr의 값이 더 작다면 오른으로 재귀함수 실행
+		return searchRecursive(ptr->right, key);
 
 }
 
 Node* searchIterative(Node* head, int key)
 {
-
+	Node *cur =head->left;
+	while(cur!=NULL){ //cur가 NULL이면 찾는 값이 없는 경우.
+		if(cur->key==key) //노드의 키값과 찾는 키가 같은 경우 리턴.
+			return cur; //
+		else if(cur->key<key) //노드 안의 키값이 찾는 키값보다 작은경우 오른쪽으로 간다.
+			cur=cur->right;
+		else //노드 안의 키값이 찾는 키값보다 큰 경우 왼쪽으로 간다.
+			cur=cur->left;
+	}
 }
 
 
 int freeBST(Node* head)
 {
 
+
+	return 1;
 }
 
 
