@@ -38,6 +38,7 @@ int main()
 	int key;
 	Node* head = NULL;
 	Node* ptr = NULL;	/* temp */
+
 	printf("[----- [이연규] [2018038038] -----]\n");
 	do {
 		printf("\n\n");
@@ -214,6 +215,9 @@ int deleteLeafNode(Node* head, int key)
 	parent->right=NULL; //왼쪽 자식이 존재 하지 않다면 오른쪽 자식을 NULL로 처리.
 	free(del);
 	return 0;
+	}
+	else{
+		printf("the node [%d] is not a leaf\n\n",key);
 	}
 	return 1;
 }
